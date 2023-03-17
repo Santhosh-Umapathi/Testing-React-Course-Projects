@@ -64,6 +64,8 @@ test("shows link correctly to src code", async () => {
     </MemoryRouter>
   );
 
+  await screen.findByRole("img", { name: repository.language });
+
   const link = await screen.findByRole("link", {
     name: new RegExp(repository.owner.login, "i"),
   });
