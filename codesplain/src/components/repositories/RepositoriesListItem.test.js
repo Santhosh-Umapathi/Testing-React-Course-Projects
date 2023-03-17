@@ -1,8 +1,13 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import RepositoriesListItem from "./RepositoriesListItem";
 import { MemoryRouter } from "react-router";
 
-test("link to show github homepage", () => {
+// STEP:2 - Module Mocking - Mocking the FileIcon component
+jest.mock("../tree/FileIcon", () => {
+  return () => "File Icon Component";
+});
+
+test("link to show github homepage", async () => {
   const repository = {
     full_name: "jack sparrow",
     language: "Javascript",
@@ -19,6 +24,21 @@ test("link to show github homepage", () => {
       <RepositoriesListItem repository={repository} />
     </MemoryRouter>
   );
-  //   const linkElement = screen.getByText(/link/i);
-  //   expect(linkElement).toBeInTheDocument();
+
+  // screen.debug();
+  // await pause(500);
+  // screen.debug();
+
+  // STEP:1 - Resolves ACT warning, 90% use findBy when ever there is useEffect and a promise on the component
+  await screen.findByRole("img", { name: "Javascript" });
+
+  // STEP:2 - Module Mocking using jest.mock
+
+  // STEP:3 - ACT with pause (Not recommended, only last resort)
+  // await act(async () => {
+  //   await pause(1000);
+  // });
 });
+
+// Helper function to wait for promise to resolve
+const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
