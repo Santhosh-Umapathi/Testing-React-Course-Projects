@@ -3,9 +3,9 @@ import RepositoriesListItem from "./RepositoriesListItem";
 import { MemoryRouter } from "react-router";
 
 // STEP:2 - Module Mocking - Mocking the FileIcon component
-jest.mock("../tree/FileIcon", () => {
-  return () => "File Icon Component";
-});
+// jest.mock("../tree/FileIcon", () => {
+//   return () => "File Icon Component";
+// });
 
 test("link to show github homepage", async () => {
   const repository = {
@@ -30,7 +30,7 @@ test("link to show github homepage", async () => {
   // screen.debug();
 
   // STEP:1 - Resolves ACT warning, 90% use findBy when ever there is useEffect and a promise on the component
-  await screen.findByRole("img", { name: "Javascript" });
+  await screen.findByRole("img", { name: repository.language });
 
   // STEP:2 - Module Mocking using jest.mock
 
@@ -38,6 +38,11 @@ test("link to show github homepage", async () => {
   // await act(async () => {
   //   await pause(1000);
   // });
+
+  const link = screen.getByRole("link", {
+    name: /github repository/i,
+  });
+  expect(link).toHaveAttribute("href", repository.html_url);
 });
 
 // Helper function to wait for promise to resolve
