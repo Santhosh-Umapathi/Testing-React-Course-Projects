@@ -7,18 +7,18 @@ import { MemoryRouter } from "react-router";
 //   return () => "File Icon Component";
 // });
 
-test("link to show github homepage", async () => {
-  const repository = {
-    full_name: "jack sparrow",
-    language: "Javascript",
-    description: "Javascript is the best language ever",
-    owner: {
-      login: "jack",
-    },
-    name: "jack sparrow",
-    html_url: "https://github.com",
-  };
+const repository = {
+  full_name: "jack sparrow",
+  language: "Javascript",
+  description: "Javascript is the best language ever",
+  owner: {
+    login: "jack",
+  },
+  name: "jack sparrow",
+  html_url: "https://github.com",
+};
 
+test("link to show github homepage", async () => {
   render(
     <MemoryRouter>
       <RepositoriesListItem repository={repository} />
@@ -43,6 +43,32 @@ test("link to show github homepage", async () => {
     name: /github repository/i,
   });
   expect(link).toHaveAttribute("href", repository.html_url);
+});
+
+test("shows icon correctly based on language", async () => {
+  render(
+    <MemoryRouter>
+      <RepositoriesListItem repository={repository} />
+    </MemoryRouter>
+  );
+
+  const icon = await screen.findByRole("img", { name: repository.language });
+
+  expect(icon).toHaveClass("js-icon");
+});
+
+test("shows link correctly to src code", async () => {
+  render(
+    <MemoryRouter>
+      <RepositoriesListItem repository={repository} />
+    </MemoryRouter>
+  );
+
+  const link = await screen.findByRole("link", {
+    name: new RegExp(repository.owner.login, "i"),
+  });
+
+  expect(link).toHaveAttribute("href", `/repositories/${repository.full_name}`);
 });
 
 // Helper function to wait for promise to resolve
