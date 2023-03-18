@@ -13,7 +13,7 @@ test("Renders two inputs and a button", () => {
   expect(button).toBeInTheDocument();
 });
 
-test("It renders inputs with 'onUserAdd' and submit form", () => {
+test("It renders inputs with 'onUserAdd' and submit form", async () => {
   const mock = jest.fn();
   const mockData = {
     name: "John Doe",
@@ -26,14 +26,14 @@ test("It renders inputs with 'onUserAdd' and submit form", () => {
   const emailInput = screen.getByRole("textbox", { name: /email/i });
 
   // Simulate user input
-  user.click(nameInput);
-  user.keyboard(mockData.name);
+  await user.click(nameInput);
+  await user.keyboard(mockData.name);
 
-  user.click(emailInput);
-  user.keyboard(mockData.email);
+  await user.click(emailInput);
+  await user.keyboard(mockData.email);
 
   const button = screen.getByRole("button");
-  user.click(button);
+  await user.click(button);
 
   // Assertion
   expect(mock).toHaveBeenCalled();
@@ -43,7 +43,7 @@ test("It renders inputs with 'onUserAdd' and submit form", () => {
   });
 });
 
-test("It empties user inputs after submit", () => {
+test("It empties user inputs after submit", async () => {
   render(<UserForm onUserAdd={() => {}} />);
 
   // Find inputs - 2 inputs
@@ -53,11 +53,11 @@ test("It empties user inputs after submit", () => {
   const button = screen.getByRole("button");
 
   // Simulate user input
-  user.click(nameInput);
-  user.keyboard("John Doe");
-  user.click(emailInput);
-  user.keyboard("John@john.com");
-  user.click(button);
+  await user.click(nameInput);
+  await user.keyboard("John Doe");
+  await user.click(emailInput);
+  await user.keyboard("John@john.com");
+  await user.click(button);
 
   // Assertion
   expect(nameInput).toHaveValue("");
